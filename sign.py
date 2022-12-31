@@ -28,7 +28,7 @@ StrPath = Union[str, Path]
 
 def safe_glob(input: Path, pattern: str):
     for f in input.glob(pattern):
-        if not f.name.startswith("._") and f.name not in [".DS_Store", ".AppleDouble", "__MACOSX"]:
+        if not (f.name.startswith("._") or f.name == ".DS_Store" or f.name == "__MACOSX" or f.name == ".AppleDouble"):
             yield f
 
 
@@ -877,6 +877,10 @@ class Signer:
                     keychain.append(f"{self.opts.team_id}.{item[item.index('.')+1:]}")
         else:
             supported_entitlements = [
+                "com.apple.developer.usernotifications.filtering",
+                "com.apple.developer.usernotifications.communication",
+                "com.apple.developer.push-to-talk",
+                "com.apple.developer.associated-domains",
                 "com.apple.developer.default-data-protection",
                 "com.apple.developer.healthkit",
                 "com.apple.developer.healthkit.access",
@@ -891,6 +895,10 @@ class Signer:
                 supported_entitlements.extend(
                     [
                         "aps-environment",
+                        "com.apple.developer.push-to-talk",
+                        "com.apple.developer.usernotifications.communication",
+                        "com.apple.developer.usernotifications.filtering",
+                        "com.apple.developer.associated-domains",
                         "com.apple.developer.icloud-container-development-container-identifiers",
                         "com.apple.developer.icloud-container-environment",
                         "com.apple.developer.icloud-container-identifiers",
